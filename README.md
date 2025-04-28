@@ -83,49 +83,8 @@ The app uses The Movie Database (TMDB) API. You need to:
 2. Request an API key from your account settings
 3. Replace the API key in `src/services/api.js` or use environment variables
 
-## Key Components
-
-### MovieContext
-
-Central state management for favorites:
-- Stores favorite movies in localStorage
-- Provides methods for adding/removing favorites
-- Checks if a movie is marked as favorite
-
-### MovieCard
-
-Displays individual movies with:
-- Movie poster image
-- Title and release year
-- Favorite toggle button with animation
-
-### Home Page
-
-Features:
-- Search input for finding movies
-- Displays search results or popular movies
-- Responsive grid layout
-
-### Favorites Page
-
-Shows all saved favorite movies with:
-- Ability to remove movies from favorites
-- Empty state when no favorites exist
-
-## Future Enhancements
-
-- User authentication
-- Movie rating system
-- Movie details page
-- Genre filtering
-- Recommendations based on favorites
-- Dark/light theme toggle
 
 ## License
 
 MIT
 
-## Credits
-
-- Movie data provided by [The Movie Database (TMDB)](https://www.themoviedb.org)
-- Background video from [source] (replace with actual source)
