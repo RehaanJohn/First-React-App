@@ -4,73 +4,91 @@ import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
 
 function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+    // Function to load popular movies
     const loadPopularMovies = async () => {
-      try {
-        const popularMovies = await getPopularMovies();
-        setMovies(popularMovies);
-      } catch (err) {
-        console.log(err);
-        setError("Failed to load movies...");
-      } finally {
-        setLoading(false);
-      }
+        try {
+            setLoading(true);
+            const popularMovies = await getPopularMovies();
+            setMovies(popularMovies);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to load popular movies.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    loadPopularMovies();
-  }, []);
+    // Function to load searched movies
+    const loadSearchedMovies = async (query) => {
+        try {
+            setLoading(true);
+            const searchedMovies = await searchMovies(query);
+            setMovies(searchedMovies);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to search movies.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return
-    if (loading) return
+    // useEffect to load popular movies on mount
+    useEffect(() => {
+        loadPopularMovies();
+    }, []);
 
-    setLoading(true)
-    try {
-        const searchResults = await searchMovies(searchQuery)
-        setMovies(searchResults)
-        setError(null)
-    } catch (err) {
-        console.log(err)
-        setError("Failed to search movies...")
-    } finally {
-        setLoading(false)
-    }
-  };
+    // useEffect to trigger search when searchQuery changes
+    useEffect(() => {
+        if (searchQuery.trim() === "") {
+            // If search is empty, show popular movies
+            loadPopularMovies();
+        } else {
+            // Otherwise, search
+            loadSearchedMovies(searchQuery);
+        }
+    }, [searchQuery]);
 
-  return (
-    <div className="home">
-      <form onSubmit={handleSearch} className="search-form">
-        <input
-          type="text"
-          placeholder="Search for movies..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button type="submit" className="search-button">
-          Search
-        </button>
-      </form>
+    return (
+        <div className="home">
+            <form onSubmit={(e) => e.preventDefault()} className="search-form">
+                <input
+                    type="text"
+                    placeholder="Search for movies..."
+                    className="search-input"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {/* Optional: Add a clear button */}
+                {searchQuery && (
+                    <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setSearchQuery("")}
+                    >
+                        Clear
+                    </button>
+                )}
+            </form>
 
-        {error && <div className="error-message">{error}</div>}
+            {loading && <p>Loading movies...</p>}
+            {error && <p className="error">{error}</p>}
 
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : (
-        <div className="movies-grid">
-          {movies.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
-          ))}
+            <div className="movies-grid">
+                {movies.length > 0 ? (
+                    movies.map((movie) => (
+                        <MovieCard movie={movie} key={movie.id} />
+                    ))
+                ) : (
+                    !loading && <p>No movies found.</p>
+                )}
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default Home;

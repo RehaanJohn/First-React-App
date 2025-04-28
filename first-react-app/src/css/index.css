@@ -1,3 +1,5 @@
+/* index.css */
+
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -5,12 +7,28 @@
   
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+  
+    /* Animated gradient background */
+    background: linear-gradient(135deg,
+      #fcfcfc 0%,
+      #000000 25%,
+      #636262 50%,
+      #272727 75%,
+      #272727 100%
+    );
+    background-size: 600% 600%;
+    animation: gradientBG 20s ease infinite;
   
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  @keyframes gradientBG {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
   
   * {
@@ -73,7 +91,14 @@
   @media (prefers-color-scheme: light) {
     :root {
       color: #213547;
-      background-color: #ffffff;
+      /* Light‐mode fallback: off‐white */
+      background: linear-gradient(135deg,
+        #ece9e6 0%,
+        #ffffff 25%,
+        #f6f3ff 50%,
+        #e0c3fc 75%,
+        #ece9e6 100%
+      );
     }
     a:hover {
       color: #747bff;
@@ -82,3 +107,4 @@
       background-color: #f9f9f9;
     }
   }
+  
