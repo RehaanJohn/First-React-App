@@ -53,6 +53,8 @@ function Home() {
         }
     }, [searchQuery]);
 
+    
+
     return (
         <div className="home">
             <form onSubmit={(e) => e.preventDefault()} className="search-form">
